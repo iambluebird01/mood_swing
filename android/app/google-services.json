@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1039154049310",
+    "project_id": "moodswing-b3a8f",
+    "storage_bucket": "moodswing-b3a8f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039154049310:android:24e1f3d100bd384539d90f",
+        "android_client_info": {
+          "package_name": "com.example.mood_swing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMj5HWyb2AkF7nrXgDwKEe4_92AL66xd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
