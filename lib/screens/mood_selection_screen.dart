@@ -20,17 +20,60 @@ class MoodSelectionScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final mood = moods.keys.elementAt(index);
           final genreId = moods[mood]!;
-          return ListTile(
-            title: Text(mood),
-            onTap: () async {
-              final movies = await MovieService().fetchMoviesByMood(genreId);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MoviesListScreen(mood: mood, movies: movies),
+
+          return Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            child: GestureDetector(
+              onTap: () async {
+                final movies = await MovieService().fetchMoviesByMood(genreId);
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => MoviesListScreen(
+                      mood: mood,
+                      movies: movies,
+                    ),
+                    transitionsBuilder: (_, anim, __, child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(anim),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
                 ),
-              );
-            },
+                child: Container(
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.teal.shade100, Colors.teal.shade400],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Center(
+                    child: Text(
+                      mood,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           );
         },
       ),
@@ -48,13 +91,17 @@ class MoviesListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('$mood Movies')),
-      body: ListView.builder(
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
         itemCount: movies.length,
         itemBuilder: (context, index) {
           final movie = movies[index];
-          return ListTile(
-            title: Text(movie['title']),
-            subtitle: Text('Rating: ${movie['vote_average']}'),
+          return GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
@@ -63,6 +110,41 @@ class MoviesListScreen extends StatelessWidget {
                 ),
               );
             },
+            child: Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(10),
+                      ),
+                      child: Image.network(
+                        'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      movie['title'],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),

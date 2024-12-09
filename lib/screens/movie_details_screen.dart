@@ -23,31 +23,47 @@ class MovieDetailsScreen extends StatelessWidget {
         final movie = snapshot.data as Map<String, dynamic>;
         return Scaffold(
           appBar: AppBar(title: Text(movie['title'])),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  movie['title'],
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                Text('Rating: ${movie['vote_average']}'),
-                const SizedBox(height: 10),
-                Text(movie['overview']),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    await FirestoreService().saveFavoriteMovie(movie);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Added to Favorites')),
-                    );
-                  },
-                  child: const Text('Add to Favorites'),
-                ),
-              ],
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
+                        height: 300,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    movie['title'],
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text('Rating: ${movie['vote_average']} / 10'),
+                  const SizedBox(height: 10),
+                  Text(movie['overview']),
+                  const SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.favorite),
+                    label: const Text('Add to Favorites'),
+                    onPressed: () async {
+                      await FirestoreService().saveFavoriteMovie(movie);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Added to Favorites')),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

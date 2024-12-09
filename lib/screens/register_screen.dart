@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../widgets/custom_button.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -13,7 +14,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
+      appBar: AppBar(
+        title: const Text('Register'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -29,7 +32,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               obscureText: true,
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
+            CustomButton(
+              text: 'Register',
               onPressed: () async {
                 try {
                   await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -46,7 +50,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   );
                 }
               },
-              child: const Text('Register'),
             ),
           ],
         ),

@@ -22,11 +22,27 @@ class FavoritesScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: movies.length,
             itemBuilder: (context, index) {
-              // Explicitly cast to Map<String, dynamic>
               final movie = movies[index].data() as Map<String, dynamic>;
-              return ListTile(
-                title: Text(movie['title'] ?? 'No Title'),
-                subtitle: Text('Rating: ${movie['vote_average'] ?? 'N/A'}'),
+              return Dismissible(
+                key: Key(movies[index].id),
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                direction: DismissDirection.endToStart,
+                onDismissed: (direction) async {
+                  await FirestoreService()
+                      .deleteFavoriteMovie(movies[index].id);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Removed from Favorites')),
+                  );
+                },
+                child: ListTile(
+                  title: Text(movie['title'] ?? 'No Title'),
+                  subtitle: Text('Rating: ${movie['vote_average'] ?? 'N/A'}'),
+                ),
               );
             },
           );

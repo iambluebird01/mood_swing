@@ -16,7 +16,8 @@ class MoodSwingApp extends StatelessWidget {
     return MaterialApp(
       title: 'MoodSwing',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
       home: LoginScreen(),

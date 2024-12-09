@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class MovieService {
-  final String _apiKey =
-      'aad751ebf88e2efc6153dc30a93b624e'; // Replace with your actual TMDB API Key
+  final String _apiKey = 'aad751ebf88e2efc6153dc30a93b624e';
   final String _baseUrl = 'https://api.themoviedb.org/3';
 
   // Fetch movies by mood (genre)
