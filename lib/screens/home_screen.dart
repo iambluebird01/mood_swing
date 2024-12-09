@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'settings_screen.dart';
+import 'profile_screen.dart';
 import 'mood_selection_screen.dart';
 import 'favorites_screen.dart';
-import '../services/auth_service.dart';
 import '../widgets/custom_button.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,17 +13,28 @@ class HomeScreen extends StatelessWidget {
         title: const Text('MoodSwing'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await AuthService().logout();
-              Navigator.popUntil(context, (route) => route.isFirst);
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => SettingsScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ProfileScreen()),
+              );
             },
           ),
         ],
       ),
       body: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomButton(
               text: 'Choose Your Mood',

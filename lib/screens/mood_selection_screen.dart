@@ -26,25 +26,28 @@ class MoodSelectionScreen extends StatelessWidget {
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
             child: GestureDetector(
               onTap: () async {
-                final movies = await MovieService().fetchMoviesByMood(genreId);
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => MoviesListScreen(
-                      mood: mood,
-                      movies: movies,
+                try {
+                  final movies =
+                      await MovieService().fetchMoviesByMood(genreId);
+
+                  if (movies.isEmpty) {
+                    throw Exception('No movies found for this mood.');
+                  }
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => MoviesListScreen(
+                        mood: mood,
+                        movies: movies,
+                      ),
                     ),
-                    transitionsBuilder: (_, anim, __, child) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(1.0, 0.0),
-                          end: Offset.zero,
-                        ).animate(anim),
-                        child: child,
-                      );
-                    },
-                  ),
-                );
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error: ${e.toString()}')),
+                  );
+                }
               },
               child: Card(
                 elevation: 8,
@@ -83,7 +86,7 @@ class MoodSelectionScreen extends StatelessWidget {
 
 class MoviesListScreen extends StatelessWidget {
   final String mood;
-  final List movies;
+  final List<Map<String, dynamic>> movies;
 
   const MoviesListScreen({required this.mood, required this.movies});
 
@@ -132,7 +135,7 @@ class MoviesListScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      movie['title'],
+                      movie['title'] ?? 'No Title',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 16,
